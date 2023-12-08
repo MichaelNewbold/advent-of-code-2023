@@ -8,3 +8,8 @@ const dataFetch = () => {
     throw err;
   }
 };
+
+const dataSplit = (data) => {
+  const split = data.toString().split('\n');
+  return split;
+};
