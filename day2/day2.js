@@ -25,7 +25,6 @@ const maxOfGame = (game) => {
       .replaceAll('lue', '');
   });
   removed = [removed[0], removed[1].split(';').join(',').split(',')];
-  let validGame = true;
 
   const minNums = {
     r: 0,
@@ -35,18 +34,22 @@ const maxOfGame = (game) => {
 
   removed[1].forEach((pull) => {
     const color = pull.slice(-1);
-    const num = pull.slice(0, -1);
-    if (num > minNums[color]) minNums[color] = num;
+    const num = Number(pull.slice(0, -1));
+    if (num >= minNums[color]) {
+      minNums[color] = num;
+      console.log(removed[0], minNums);
+    }
   });
   return minNums;
 };
 
 const multGames = (arr) => {
   let sum = 0;
-  arr.forEach((game) => {
+  arr.forEach((game, idx) => {
     const minNums = maxOfGame(game);
-    const power = minNums[r] * minNums[g] * minNums[b];
+    const power = minNums.r * minNums.g * minNums.b;
     sum += power;
+    console.log(idx, minNums);
   });
   return sum;
 };
