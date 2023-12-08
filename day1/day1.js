@@ -36,11 +36,33 @@ const firstAndLast = (string) => {
       last = string[i];
     } else if (letters[string[i]]) {
       const l = string[i];
-      let r;
-      
+      for (let j = 0; j < letters[l].length; j++) {
+        for (let k = 0; k < letters[l][j].length; k++) {
+          if (string[i + k] !== letters[l][j][k]) break;
+          if (k === letters[l][j].length - 1) {
+            if (first === undefined) first = string.slice(i, i + k + 1);
+            last = string.slice(i, i + k + 1);
+            i = i + k - 1;
+          }
+        }
+      }
     }
   }
-  num = Number(first.concat(last));
+  const strToNum = {
+    zero: 0,
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+  };
+  first = strToNum.hasOwnProperty(first) ? strToNum[first] : first;
+  last = strToNum.hasOwnProperty(last) ? strToNum[last] : last;
+  num = Number('' + first + last);
   return num;
 };
 
@@ -48,9 +70,9 @@ const result = () => {
   const data = dataFetch();
   const dataArr = dataSplit(data);
   const numsArr = dataArr.map(firstAndLast);
-  const sum = numsArr.reduce((acc, curr) => {
+  const sum = numsArr.reduce((acc, curr, idx) => {
     return acc + curr;
-  });
+  }, 0);
   return sum;
 };
 
