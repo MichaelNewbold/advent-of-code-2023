@@ -23,7 +23,7 @@ const arrayTraverse = (array) => {
   for (let y = 0; y < array.length; y++) {
     for (let x = 0; x < array[0].length; x++) {
       const currSymbol = array[y][x];
-      if (currSymbol !== '.' && !numbers.has(currSymbol)) {
+      if (currSymbol === '*') {
         sum += foundSym(array, x, y);
       }
     }
@@ -32,18 +32,43 @@ const arrayTraverse = (array) => {
 };
 
 const foundSym = (array, x, y) => {
-  let sum = 0;
+  let ratio = 1;
+  let adj = 0;
   // check indices around symbol for number
-  if (numbers.has(array[y - 1][x])) sum += foundNum(array, x, y - 1);
-  if (numbers.has(array[y - 1][x - 1])) sum += foundNum(array, x - 1, y - 1);
-  if (numbers.has(array[y - 1][x + 1])) sum += foundNum(array, x + 1, y - 1);
-  if (numbers.has(array[y][x - 1])) sum += foundNum(array, x - 1, y);
-  if (numbers.has(array[y + 1][x - 1])) sum += foundNum(array, x - 1, y + 1);
-  if (numbers.has(array[y + 1][x + 1])) sum += foundNum(array, x + 1, y + 1);
-  if (numbers.has(array[y + 1][x])) sum += foundNum(array, x, y + 1);
-  if (numbers.has(array[y][x + 1])) sum += foundNum(array, x + 1, y);
+  if (numbers.has(array[y - 1][x])) {
+    ratio *= foundNum(array, x, y - 1);
+    adj++;
+  }
+  if (numbers.has(array[y - 1][x - 1])) {
+    ratio *= foundNum(array, x - 1, y - 1);
+    adj++;
+  }
+  if (numbers.has(array[y - 1][x + 1])) {
+    ratio *= foundNum(array, x + 1, y - 1);
+    adj++;
+  }
+  if (numbers.has(array[y][x - 1])) {
+    ratio *= foundNum(array, x - 1, y);
+    adj++;
+  }
+  if (numbers.has(array[y + 1][x - 1])) {
+    ratio *= foundNum(array, x - 1, y + 1);
+    adj++;
+  }
+  if (numbers.has(array[y + 1][x + 1])) {
+    ratio *= foundNum(array, x + 1, y + 1);
+    adj++;
+  }
+  if (numbers.has(array[y + 1][x])) {
+    ratio *= foundNum(array, x, y + 1);
+    adj++;
+  }
+  if (numbers.has(array[y][x + 1])) {
+    ratio *= foundNum(array, x + 1, y);
+    adj++;
+  }
   // if number found, call foundNum with num indices
-  return sum;
+  return adj === 2 ? ratio : 0;
 };
 
 const foundNum = (array, x, y) => {
